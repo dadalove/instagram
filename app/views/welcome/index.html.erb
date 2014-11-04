@@ -2,6 +2,7 @@
 
 <%= link_to "New Photo", new_photo_path %>
 
+<br>
 
 <% @photos.each do |photo| %>
 
@@ -10,4 +11,21 @@
   
   <%= link_to "delete", photo_path(photo), :method => :delete %>
 
+  <%= form_for photo.comments.new do |f| %>
+
+    <%= f.label :content,'content' %>
+    <%= f.text_area :content %>
+    <%= f.hidden_field :photo_id %>
+
+    <%= f.submit %>
+
+  <% end %>
+
+<br>
+
 <% end %>
+
+
+
+
+

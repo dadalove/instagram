@@ -5,6 +5,10 @@ Rails.application.routes.draw do
   resources :photos
   resources :comments
 
+  get '/auth/:provider/callback', :to => 'sessions#create'
+  get '/auth/failure', to: 'sessions#failure'
+  delete '/auth/signout', to: 'sessions#destroy'
+
   # You can have the root of your site routed with "root"
    root 'welcome#index'
 

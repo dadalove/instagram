@@ -3,12 +3,14 @@ class WelcomeController < ApplicationController
     @photos = Photo.all
   end
 
+  
+
     
 
 
 
 
-
+  
 
 
 

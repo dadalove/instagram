@@ -1,9 +1,9 @@
-class CommentsController < 
+class CommentsController < ApplicationController
 
   def create
-    @comment = @Comment.new(comment_params)
+    @comment = Comment.new(comment_params)
 
-    if @reply.save
+    if @comment.save
       redirect_to root_path
     else
       render :new
@@ -11,7 +11,7 @@ class CommentsController <
   end
 
 
-  
+
 
 
 

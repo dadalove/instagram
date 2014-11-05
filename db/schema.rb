@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141104090813) do
+ActiveRecord::Schema.define(version: 20141105064227) do
 
   create_table "comments", force: true do |t|
     t.integer  "photo_id"
@@ -29,5 +29,18 @@ ActiveRecord::Schema.define(version: 20141104090813) do
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
   end
+
+  create_table "users", force: true do |t|
+    t.string   "email"
+    t.string   "name"
+    t.string   "image"
+    t.string   "fb_uid"
+    t.string   "fb_token"
+    t.datetime "fb_expires_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "users", ["fb_uid"], name: "index_users_on_fb_uid"
 
 end

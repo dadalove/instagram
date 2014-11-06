@@ -10,4 +10,7 @@ class User < ActiveRecord::Base
     user
   end
 
+  has_many :comments, :dependent => :destroy
+  has_many :photos, :through => :comments
+
 end

@@ -1,37 +1,47 @@
 <h1>Instagram</h1>
 
 <% if current_user %>
-  Hi, <%= current_user.name %>
+  Hi, <%= current_user.name %> <br>
+  <%= link_to "New Photo", new_photo_path %>
   <%= link_to "登出", auth_signout_path, :method => :delete %></a>
 <% else %>
-  <%= link_to "Facebook 登入", "/auth/facebook", id: "sign_in" %></a>
+  <%= link_to "Facebook 登入", "/auth/facebook" %></a>
 <% end %>
 
 
-<%= link_to "New Photo", new_photo_path %>
+
 
 <br>
 
 <% @photos.each do |photo| %>
 
-  <%= image_tag photo.avatar(:medium) %>
+  <%= image_tag photo.avatar(:medium) %>  <br>
   <%= photo.content %>
   
-  <%= link_to "delete", photo_path(photo), :method => :delete %>
 
+  <% if current_user != photo.user_id %>
+    <%= link_to "delete", photo_path(photo), :method => :delete %>
+  <% end %>
+  <br>
 
-  <%= form_for photo.comments.new do |f| %>
+  <% photo.comments.each do |comment| %>
+    <%= comment.content %>
+    <%= comment.user_id %>
 
-    <%= f.label :content,'content' %>
-    <%= f.text_area :content %>
-    <%= f.hidden_field :photo_id %>
+    <% if current_user != comment.user_id %>
+      <%= link_to "delete", comment_path(comment), :method => :delete %>
+    <% end %>
 
-    <%= f.submit %>
-
+    <br>
   <% end %>
 
-<br>
-
+  <%= form_for photo.comments.build do |f| %>
+    <%#= f.label :content,'content' %>
+    <%= f.text_area :content %>
+    <%= f.hidden_field :photo_id %>
+    <%= f.submit %>
+  <% end %>
+  <br>
 <% end %>
 
 

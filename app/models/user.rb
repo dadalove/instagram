@@ -13,4 +13,6 @@ class User < ActiveRecord::Base
   has_many :comments, :dependent => :destroy
   has_many :photos, :through => :comments
 
+  has_many :photos
+
 end

@@ -16,19 +16,24 @@
 <% @photos.each do |photo| %>
 
   <%= image_tag photo.avatar(:medium) %>  <br>
-  <%= photo.content %>
+   
+  <%= link_to photo.user.try(:name) %>     
+  
+  <%= photo.created_at.strftime("%I:%M %p %b %d") %>
+  <br> 
+  title:<%= photo.content %>       
   
 
-  <% if current_user != photo.user_id %>
+  <% if current_user == photo.user_id %>
     <%= link_to "delete", photo_path(photo), :method => :delete %>
   <% end %>
   <br>
 
   <% photo.comments.each do |comment| %>
     <%= comment.content %>
-    <%= comment.user_id %>
+    <%= comment.user.try(:name) %>  
 
-    <% if current_user != comment.user_id %>
+    <% if current_user == comment.user_id %>
       <%= link_to "delete", comment_path(comment), :method => :delete %>
     <% end %>
 

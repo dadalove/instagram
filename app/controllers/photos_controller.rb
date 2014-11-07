@@ -1,4 +1,6 @@
 class PhotosController < ApplicationController
+  
+
   def index
     
   end
@@ -10,6 +12,9 @@ class PhotosController < ApplicationController
 
   def create
     @photo = Photo.new(photo_params)
+
+    @photo.user = current_user
+
     if @photo.save
       redirect_to root_path
     else
@@ -24,8 +29,14 @@ class PhotosController < ApplicationController
 
   def destroy
     @photo = Photo.find(params[:id])
-    @photo.destroy
-    redirect_to root_path
+    
+    if @photo.user == current_user
+      @ohoto.destroy
+      redirect_to root_path
+    else
+      redirect_to root_path
+    end
+
   end
 
 

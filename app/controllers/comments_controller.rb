@@ -1,19 +1,27 @@
 class CommentsController < ApplicationController
 
+  
+
   def create
     @comment = Comment.new(comment_params)
+    @comment.user = current_user
 
     if @comment.save
       redirect_to root_path
     else
-      render :new
+      redirect_to root_path
     end  
   end
 
   def destroy
     @comment = Comment.find(params[:id])
-    @comment.destroy
-    redirect_to root_path
+    
+    if @comment.user == current_user
+      @comment.destroy
+      redirect_to root_path
+    else
+      redirect_to root_path
+    end
   end
 
 

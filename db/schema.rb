@@ -22,6 +22,8 @@ ActiveRecord::Schema.define(version: 20141106095650) do
   end
 
   create_table "likes", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "photo_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -38,6 +40,8 @@ ActiveRecord::Schema.define(version: 20141106095650) do
   end
 
   create_table "subscriptions", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "photo_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

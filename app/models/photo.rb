@@ -7,5 +7,6 @@ class Photo < ActiveRecord::Base
   has_many :commented_users, :through => :comments, :source => :user
 
   belongs_to :user
+  has_many :likes
 
 end

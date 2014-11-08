@@ -4,9 +4,9 @@ class CommentsController < ApplicationController
 
   def create
     @comment = Comment.new(comment_params)
-    @comment.user = current_user
-
-    if @comment.save
+    
+    if @comment.user = current_user 
+      @comment.save
       redirect_to root_path
     else
       redirect_to root_path

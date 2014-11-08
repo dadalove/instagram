@@ -2,7 +2,15 @@ Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
+  resources :welcome do
+    member do 
+      post :like
+    end
+  end 
+
+
   resources :photos
+
   resources :comments
 
   get '/auth/:provider/callback', :to => 'sessions#create'

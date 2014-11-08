@@ -22,7 +22,7 @@ class PhotosController < ApplicationController
     end 
   end
 
-
+  
 
 
   

@@ -11,12 +11,16 @@
 
 
 
+
 <br>
 
 <% @photos.each do |photo| %>
 
   <%= image_tag photo.avatar(:medium) %>  <br>
-   
+
+  <%= link_to "like", like_welcome_path(photo), :method => :post %>
+  <%= photo.likes.count %>  <br>
+
   <%= link_to photo.user.try(:name) %>     
   
   <%= photo.created_at.strftime("%I:%M %p %b %d") %>
@@ -30,8 +34,8 @@
   <br>
 
   <% photo.comments.each do |comment| %>
+    <%= link_to comment.user.try(:name) %>  
     <%= comment.content %>
-    <%= comment.user.try(:name) %>  
 
     <% if current_user == comment.user_id %>
       <%= link_to "delete", comment_path(comment), :method => :delete %>
@@ -49,5 +53,5 @@
   <br>
 <% end %>
 
-
+<%= paginate @photos %>
 

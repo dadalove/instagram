@@ -1,0 +1,9 @@
+<%= link_to "Home", root_path %> <br>
+  <%= @comment.user.try(:name) %> <br>
+
+<% @photos.each do |photo| %>
+  <%= image_tag photo.avatar(:medium) %>
+  <%= photo.likes.count %>
+<% end %>
+  
+

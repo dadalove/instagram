@@ -23,7 +23,11 @@ class PhotosController < ApplicationController
   end
 
   
-
+  def show
+    @photo = Photo.find(params[:id])
+    @photos = Photo.all
+    @like = @photo.likes.build
+  end
 
   
 

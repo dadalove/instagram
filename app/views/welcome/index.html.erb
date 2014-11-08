@@ -18,10 +18,10 @@
 
   <%= image_tag photo.avatar(:medium) %>  <br>
 
-  <%= link_to "like", like_welcome_path(photo), :method => :post %>
+  <%= link_to "Like", like_welcome_path(photo), :method => :post %>
   <%= photo.likes.count %>  <br>
 
-  <%= link_to photo.user.try(:name) %>     
+  <%= link_to photo.user.try(:name), photo_path(photo) %>     
   
   <%= photo.created_at.strftime("%I:%M %p %b %d") %>
   <br> 
@@ -34,7 +34,7 @@
   <br>
 
   <% photo.comments.each do |comment| %>
-    <%= link_to comment.user.try(:name) %>  
+    <%= link_to comment.user.try(:name), comment_path(comment) %>  
     <%= comment.content %>
 
     <% if current_user == comment.user_id %>

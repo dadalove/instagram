@@ -19,8 +19,14 @@
   <%= image_tag photo.avatar(:medium) %>  <br>
 
   <%= link_to "Like", like_welcome_path(photo), :method => :post %>
-  <%= photo.likes.count %>  <br>
+  <%= photo.likes.count %>  
 
+  <% photo.likes.each do |a| %>
+    <%= link_to a.user.try(:name), photo_path(photo) %>
+  <% end %>  <br>
+
+  <%= link_to photo.user.likes.count, photo_path(photo) %>            <!-- 自己曾經按like的照片 -->
+ 
   <%= link_to photo.user.try(:name), photo_path(photo) %>     
   
   <%= photo.created_at.strftime("%I:%M %p %b %d") %>

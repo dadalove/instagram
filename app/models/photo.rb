@@ -6,6 +6,9 @@ class Photo < ActiveRecord::Base
   has_many :comments, :dependent => :destroy
   has_many :commented_users, :through => :comments, :source => :user
 
+  validates_presence_of :content
+  validates_presence_of :avatar_file_name
+
   belongs_to :user
   has_many :likes
 

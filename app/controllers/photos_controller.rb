@@ -1,5 +1,6 @@
 class PhotosController < ApplicationController
   
+    # before_filter :authenticate_user!, only:[:show]
 
   def index
     
@@ -18,6 +19,7 @@ class PhotosController < ApplicationController
     if @photo.save
       redirect_to root_path
     else
+      flash[:alert] = "請新增照片和描述"
       render :new
     end 
   end
@@ -25,8 +27,8 @@ class PhotosController < ApplicationController
   
   def show
     @photo = Photo.find(params[:id])
-    @photos = Photo.all
     @like = @photo.likes.build
+    @photos = Photo.all
   end
 
   
@@ -35,13 +37,17 @@ class PhotosController < ApplicationController
     @photo = Photo.find(params[:id])
     
     if @photo.user == current_user
-      @ohoto.destroy
+      @photo.destroy
       redirect_to root_path
     else
       redirect_to root_path
     end
 
   end
+
+
+
+  
 
 
 
@@ -56,6 +62,8 @@ class PhotosController < ApplicationController
   def photo_params 
     params.require(:photo).permit(:content, :avatar, :user_id)
   end
+
+  
 
 
 

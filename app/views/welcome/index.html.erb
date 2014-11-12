@@ -12,26 +12,48 @@
 
 
 
+
+
+
+
+
+
 <br>
 
 <% @photos.each do |photo| %>
 
-  <%= image_tag photo.avatar(:medium) %>  <br>
+ <%= image_tag photo.avatar(:medium) %>  <br>                                   <!-- 照片 -->
+ 
+ <%# if current_user == photo.user %>
+    <%= link_to "Like", like_welcome_path(photo), :method => :post %>           <!-- like -->
+    <%= photo.likes.count %>
+ <%# else %>
+    <%#= link_to "unlike", unlike_welcome_path(photo), :method => :post %>      <!-- unlike -->
+    <%#= photo.unlikes.count %>
+ <%# end %>  
 
-  <%= link_to "Like", like_welcome_path(photo), :method => :post %>
-  <%= photo.likes.count %>  
+ <br>
 
   <% photo.likes.each do |a| %>
-    <%= link_to a.user.try(:name), photo_path(photo) %>
+    <%= link_to a.user.try(:name), photo_path(photo) %>                        <!-- 其他使用者 -->
   <% end %>  <br>
 
-  <%= link_to photo.user.likes.count, photo_path(photo) %>            <!-- 自己曾經按like的照片 -->
+  <%#= link_to photo.user.likes.count, photo_path(photo) %>                    <!-- 自己曾經按like的照片 -->
  
-  <%= link_to photo.user.try(:name), photo_path(photo) %>     
+  發文者:<%= link_to photo.user.try(:name), photo_path(photo) %>                      <!-- 自己 -->
   
-  <%= photo.created_at.strftime("%I:%M %p %b %d") %>
-  <br> 
-  title:<%= photo.content %>       
+  <br>
+
+  訂閱:<%= link_to "subscription", subscription_welcome_path(photo), :method => :post %>    <!-- 訂閱 -->
+  <%= photo.subscriptions.count %>
+
+  <br>
+
+  時間:<%= photo.created_at.to_formatted_s(:short) %>                               <!-- po照片的時間 -->
+  
+  <br>
+
+  title:<%= photo.content %>                                                   <!-- photo描述 -->
   
 
   <% if current_user == photo.user_id %>
@@ -40,8 +62,8 @@
   <br>
 
   <% photo.comments.each do |comment| %>
-    <%= link_to comment.user.try(:name), comment_path(comment) %>  
-    <%= comment.content %>
+    <%= link_to comment.user.try(:name), comment_path(comment) %>              <!-- 留言的人 -->
+    <%= comment.content %>                                                     <!-- 留言的內容 -->
 
     <% if current_user == comment.user_id %>
       <%= link_to "delete", comment_path(comment), :method => :delete %>
@@ -52,7 +74,7 @@
 
   <%= form_for photo.comments.build do |f| %>
     <%#= f.label :content,'content' %>
-    <%= f.text_area :content %>
+    <%= f.text_area :content %>                                                 <!-- 要留言的表單 -->
     <%= f.hidden_field :photo_id %>
     <%= f.submit %>
   <% end %>

@@ -1,5 +1,6 @@
 class CommentsController < ApplicationController
 
+  before_action :authenticate_user!, only:[:show]
   
   def show
     @comment = Comment.find(params[:id])
@@ -15,6 +16,7 @@ class CommentsController < ApplicationController
       @comment.save
       redirect_to root_path
     else
+      flash[:alert] = "請先登入"
       redirect_to root_path
     end  
   end

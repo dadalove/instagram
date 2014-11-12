@@ -5,11 +5,18 @@ Rails.application.routes.draw do
   resources :welcome do
     member do 
       post :like
+      post :unlike
+      post :subscription
     end
-  end 
+  end
 
 
-  resources :photos
+
+  resources :photos do
+    member do
+      post :subscription
+    end
+  end
 
   resources :comments
 

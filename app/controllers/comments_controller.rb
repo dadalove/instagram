@@ -1,14 +1,7 @@
 class CommentsController < ApplicationController
 
-  before_action :authenticate_user!, only:[:show]
+  before_action :authenticate_user!
   
-  def show
-    @comment = Comment.find(params[:id])
-    @photos = Photo.all
-  end
-
-
-
   def create
     @comment = Comment.new(comment_params)
     
@@ -16,7 +9,6 @@ class CommentsController < ApplicationController
       @comment.save
       redirect_to root_path
     else
-      flash[:alert] = "請先登入"
       redirect_to root_path
     end  
   end
@@ -32,15 +24,10 @@ class CommentsController < ApplicationController
     end
   end
 
-
-
-
-
   private
 
   def comment_params
     params.require(:comment).permit(:content, :photo_id, :user_id)
   end
-
 
 end

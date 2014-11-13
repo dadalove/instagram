@@ -13,4 +13,13 @@ class Photo < ActiveRecord::Base
   has_many :likes
   has_many :subscriptions
 
+  def find_like_by_user(user)
+    self.likes.where( :user => user ).first
+  end
+
+  def can_user_like?(user)
+    find_like_by_user(user).nil?
+  end
+
+
 end

@@ -9,33 +9,24 @@
 <% end %>
 
 
-
-
-
-
-
-
-
-
-
 <br>
 
 <% @photos.each do |photo| %>
 
- <%= image_tag photo.avatar(:medium) %>  <br>                                   <!-- 照片 -->
+ <%= link_to image_tag(photo.avatar(:medium)), photo_path(photo) %>  <br>                                   <!-- 照片 -->
  
- <%# if current_user == photo.user %>
-    <%= link_to "Like", like_welcome_path(photo), :method => :post %>           <!-- like -->
-    <%= photo.likes.count %>
- <%# else %>
-    <%#= link_to "unlike", unlike_welcome_path(photo), :method => :post %>      <!-- unlike -->
-    <%#= photo.unlikes.count %>
- <%# end %>  
+ <%= photo.likes.count %>
+ <% if photo.can_user_like?(current_user) %>  
+
+    <%= link_to "Like", like_photo_path(photo), :method => :post %>           <!-- like -->
+ <% else %>
+    <%= link_to "Unlike", unlike_photo_path(photo), :method => :post %>      <!-- unlike -->
+ <% end %>    
 
  <br>
 
   <% photo.likes.each do |a| %>
-    <%= link_to a.user.try(:name), photo_path(photo) %>                        <!-- 其他使用者 -->
+    <%= link_to a.user.try(:name), user_path(a.user) if a.user %>                        <!-- 其他使用者 -->
   <% end %>  <br>
 
   <%#= link_to photo.user.likes.count, photo_path(photo) %>                    <!-- 自己曾經按like的照片 -->
@@ -44,7 +35,7 @@
   
   <br>
 
-  訂閱:<%= link_to "subscription", subscription_welcome_path(photo), :method => :post %>    <!-- 訂閱 -->
+  訂閱:<%= link_to "subscription", subscription_photo_path(photo), :method => :post %>    <!-- 訂閱 -->
   <%= photo.subscriptions.count %>
 
   <br>
@@ -62,7 +53,7 @@
   <br>
 
   <% photo.comments.each do |comment| %>
-    <%= link_to comment.user.try(:name), comment_path(comment) %>              <!-- 留言的人 -->
+    <%= link_to comment.user.try(:name), user_path(comment.user) %>              <!-- 留言的人 -->
     <%= comment.content %>                                                     <!-- 留言的內容 -->
 
     <% if current_user == comment.user_id %>

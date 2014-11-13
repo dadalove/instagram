@@ -2,20 +2,16 @@ Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
-  resources :welcome do
+  resources :users
+
+  resources :photos do
+
     member do 
       post :like
       post :unlike
       post :subscription
     end
-  end
 
-
-
-  resources :photos do
-    member do
-      post :subscription
-    end
   end
 
   resources :comments
@@ -25,7 +21,7 @@ Rails.application.routes.draw do
   delete '/auth/signout', to: 'sessions#destroy'
 
   # You can have the root of your site routed with "root"
-   root 'welcome#index'
+  root 'welcome#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

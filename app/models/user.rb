@@ -1,5 +1,13 @@
 class User < ActiveRecord::Base
 
+  has_many :comments, :dependent => :destroy
+  has_many :photos, :through => :comments
+
+  has_many :photos
+
+  has_many :likes
+  has_many :subscriptions
+
   def self.from_omniauth(auth_hash)
     user = where( :fb_uid => auth_hash[:uid] ).first_or_initialize
     user.name = auth_hash[:info][:name]
@@ -9,13 +17,5 @@ class User < ActiveRecord::Base
     user.save!
     user
   end
-
-  has_many :comments, :dependent => :destroy
-  has_many :photos, :through => :comments
-
-  has_many :photos
-
-  has_many :likes
-  has_many :subscriptions
 
 end

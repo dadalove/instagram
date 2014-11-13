@@ -1,8 +1,12 @@
 <%= link_to "Home", root_path %> <br>
- <%= @photo.user.try(:name) %>   <br>
+<%= @photo.user.try(:name) %>   <br>
+
+<%= image_tag(@photo.avatar) %>
+
+Comments:
+...
+
+Likes:
+....
 
 
-<% @photos.each do |photo| %>
-  <%= image_tag photo.avatar(:medium) %>
-  <%= photo.likes.count %>
-<% end %>

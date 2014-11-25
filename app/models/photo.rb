@@ -21,5 +21,13 @@ class Photo < ActiveRecord::Base
     find_like_by_user(user).nil?
   end
 
+  def find_subscription_by_user(user)
+    self.subscriptions.where( :user => user ).first
+  end
+
+  def can_user_subscription?(user)
+    find_subscription_by_user(user).nil?
+  end
+
 
 end

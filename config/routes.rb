@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       post :like
       post :unlike
       post :subscription
+      post :unsubscription
     end
 
   end

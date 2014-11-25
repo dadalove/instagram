@@ -2,11 +2,18 @@
 <%= @photo.user.try(:name) %>   <br>
 
 <%= image_tag(@photo.avatar) %>
+<%= @photo.likes.count%>Likes
 
+<br>
 Comments:
-...
+<br>
+<% @photo.comments.each do |comment| %>
+  <%= link_to comment.user.name, user_path(comment.user) %> 
+  <%= comment.content %>
+  <br>
+<% end %>
 
-Likes:
-....
+
+
 
 

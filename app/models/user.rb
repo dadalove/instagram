@@ -1,5 +1,11 @@
 class User < ActiveRecord::Base
 
+  has_many :friendships
+  has_many :friends, ->{ where( "friendships.status" => "confirmed") }, :through => :friendships
+
+  has_many :inverse_friendships, :class_name => "Friendship", :foreign_key => "friend_id"
+  has_many :inverse_friends, ->{ where( "friendships.status" => "confirmed") }, :through => :inverse_friendships, :source => "user"
+
   has_many :comments, :dependent => :destroy
   has_many :photos, :through => :comments
 

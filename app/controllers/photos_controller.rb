@@ -55,20 +55,27 @@ class PhotosController < ApplicationController
 
     redirect_to root_path
   end
-
   
   def subscription
     @photo = Photo.find(params[:id])
 
-    @subscription = @photo.subscriptions.build
-
-    if @subscription.user = current_user
-      @subscription.save
-      redirect_to root_path
-    else
-      flash[:alert] = "請先登入"
-      redirect_to root_path
+    if @photo.can_user_subscription?(current_user)
+      @subscription = @photo.subscriptions.build
+      @subscription.user = current_user
+      @subscription.save!
     end
+
+    redirect_to :back
+  end
+
+  def unsubscription
+    @photo = Photo.find(params[:id])
+
+    @subscription = @photo.find_subscription_by_user(current_user)
+
+    @subscription.destroy if @subscription
+
+    redirect_to root_path
   end
 
   private

@@ -2,7 +2,7 @@
 
 <% if current_user %>
   Hi, <%= current_user.name %> <br>
-  <%= link_to "New Photo", new_photo_path %>
+  <%= link_to "Add Photo", new_photo_path %>
   <%= link_to "登出", auth_signout_path, :method => :delete %></a>
 <% else %>
   <%= link_to "Facebook 登入", "/auth/facebook" %></a>
@@ -13,63 +13,70 @@
 
 <% @photos.each do |photo| %>
 
- <%= link_to image_tag(photo.avatar(:medium)), photo_path(photo) %>  <br>                                   <!-- 照片 -->
+ <%= link_to image_tag(photo.avatar(:medium)), photo_path(photo) %>  <br>       <!-- 照片 -->
  
- <%= photo.likes.count %>
- <% if photo.can_user_like?(current_user) %>  
+ content:<%= photo.content %>                                                   <!-- photo描述 -->
+  
+ <% if current_user == photo.user %>
+    <%= link_to "delete", photo_path(photo), :method => :delete %>              <!-- 刪除自己的po -->
+ <% end %>
+ <br>
 
-    <%= link_to "Like", like_photo_path(photo), :method => :post %>           <!-- like -->
+ <%= photo.likes.count %>
+
+ <% if photo.can_user_like?(current_user) %>  
+    <%= link_to "Like", like_photo_path(photo), :method => :post %>          <!-- like -->
  <% else %>
     <%= link_to "Unlike", unlike_photo_path(photo), :method => :post %>      <!-- unlike -->
- <% end %>    
+ <% end %>
+
+ <% photo.likes.each do |a| %>
+    <%= link_to a.user.try(:name), user_path(a.user) if a.user %>           <!-- 顯示like的人 -->
+ <% end %>  
+ <br>    
+
+ <%= photo.subscriptions.count %>
+
+ <% if photo.can_user_subscription?(current_user) %>
+  <%= link_to "subscription", subscription_photo_path(photo), :method => :post %>
+ <% else %>
+  <%= link_to "unsubscription", unsubscription_photo_path(photo), :method => :post %>
+ <% end %> 
+ <br>
+
+  <%#= link_to photo.user.likes.count, photo_path(photo) %>                    <!-- 自己曾經按like的照片 -->
+ <% @photos.each do |p| %>
+   發文者:<%= link_to p.user.try(:name), user_path(p.user) %>                      <!-- 自己 -->
+ <% end %>
+ <br>
+
+ 訂閱:<%= link_to "subscription", subscription_photo_path(photo), :method => :post %>    <!-- 訂閱 -->
+ <%= photo.subscriptions.count %>
 
  <br>
 
-  <% photo.likes.each do |a| %>
-    <%= link_to a.user.try(:name), user_path(a.user) if a.user %>                        <!-- 其他使用者 -->
-  <% end %>  <br>
-
-  <%#= link_to photo.user.likes.count, photo_path(photo) %>                    <!-- 自己曾經按like的照片 -->
- 
-  發文者:<%= link_to photo.user.try(:name), photo_path(photo) %>                      <!-- 自己 -->
+ 時間:<%= photo.created_at.to_formatted_s(:short) %>                               <!-- po照片的時間 -->
   
-  <br>
+ <br>
 
-  訂閱:<%= link_to "subscription", subscription_photo_path(photo), :method => :post %>    <!-- 訂閱 -->
-  <%= photo.subscriptions.count %>
+ <% photo.comments.each do |comment| %>
+   <%= link_to comment.user.try(:name), user_path(comment.user) %>            <!-- 留言的人 -->
+   <%= comment.content %>                                                     <!-- 留言的內容 -->
 
-  <br>
-
-  時間:<%= photo.created_at.to_formatted_s(:short) %>                               <!-- po照片的時間 -->
-  
-  <br>
-
-  title:<%= photo.content %>                                                   <!-- photo描述 -->
-  
-
-  <% if current_user == photo.user_id %>
-    <%= link_to "delete", photo_path(photo), :method => :delete %>
-  <% end %>
-  <br>
-
-  <% photo.comments.each do |comment| %>
-    <%= link_to comment.user.try(:name), user_path(comment.user) %>              <!-- 留言的人 -->
-    <%= comment.content %>                                                     <!-- 留言的內容 -->
-
-    <% if current_user == comment.user_id %>
-      <%= link_to "delete", comment_path(comment), :method => :delete %>
-    <% end %>
+   <% if current_user == comment.user %>
+     <%= link_to "delete", comment_path(comment), :method => :delete %>       <!-- 留言者的delete -->
+   <% end %>
 
     <br>
-  <% end %>
+ <% end %>
 
-  <%= form_for photo.comments.build do |f| %>
+ <%= form_for photo.comments.build do |f| %>
     <%#= f.label :content,'content' %>
     <%= f.text_area :content %>                                                 <!-- 要留言的表單 -->
     <%= f.hidden_field :photo_id %>
-    <%= f.submit %>
-  <% end %>
-  <br>
+    <%= f.submit 'comment' %>
+ <% end %>
+ 
 <% end %>
 
 <%= paginate @photos %>

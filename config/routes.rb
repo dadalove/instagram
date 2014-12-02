@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+  
+  get 'photos/index'
+
+  get 'photos/create'
+
+  get 'tags/:tag', to: 'welcome#index', as: "tag"
+  
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -11,6 +19,7 @@ Rails.application.routes.draw do
       post :unlike
       post :subscription
       post :unsubscription
+      post :tag
     end
 
   end

@@ -2,6 +2,10 @@ class PhotosController < ApplicationController
   
   before_filter :authenticate_user!
 
+  def index
+      @photos = Photo.all
+  end
+
   def new
     @photo = Photo.new
   end
@@ -43,7 +47,10 @@ class PhotosController < ApplicationController
       @like.save!
     end
 
-    redirect_to :back
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js
+    end
   end
 
   def unlike
@@ -53,7 +60,10 @@ class PhotosController < ApplicationController
 
     @like.destroy if @like
 
-    redirect_to root_path
+    respond_to do |format|
+      format.html { redirect_to :back }
+      format.js
+    end
   end
   
   def subscription
@@ -81,7 +91,7 @@ class PhotosController < ApplicationController
   private
 
   def photo_params 
-    params.require(:photo).permit(:content, :avatar, :user_id)
+    params.require(:photo).permit(:content, :avatar, :user_id, :all_tags)
   end
 
 end

@@ -6,6 +6,9 @@ class Photo < ActiveRecord::Base
   has_many :comments, :dependent => :destroy
   has_many :commented_users, :through => :comments, :source => :user
 
+  has_many :tagships
+  has_many :tags, :through => :tagships
+
   validates_presence_of :content
   validates_presence_of :avatar_file_name
 
@@ -29,5 +32,17 @@ class Photo < ActiveRecord::Base
     find_subscription_by_user(user).nil?
   end
 
+  def all_tags=(names)
+    self.tags = names.split(",").map do |name|
+      Tag.where(name: name.strip).first_or_create!
+    end
+  end
+ 
+  def all_tags
+    self.tags.map(&:name).join(", ")
+  end
 
+  def self.tagged_with(name)
+    Tag.find_by_name!(name).photos
+  end
 end

@@ -15,8 +15,10 @@
 
  <%= link_to image_tag(photo.avatar(:medium)), photo_path(photo) %>  <br>       <!-- 照片 -->
  
- content:<%= photo.content %>                                                   <!-- photo描述 -->
+ content:<%= photo.content %> <br>                                              <!-- photo描述 -->
   
+ tags:<%= tag_links(photo.all_tags) %>                                          <!-- tags -->
+ 
  <% if current_user == photo.user %>
     <%= link_to "delete", photo_path(photo), :method => :delete %>              <!-- 刪除自己的po -->
  <% end %>
@@ -24,11 +26,20 @@
 
  <%= photo.likes.count %>
 
- <% if photo.can_user_like?(current_user) %>  
-    <%= link_to "Like", like_photo_path(photo), :method => :post %>          <!-- like -->
- <% else %>
-    <%= link_to "Unlike", unlike_photo_path(photo), :method => :post %>      <!-- unlike -->
- <% end %>
+<% 
+  if photo.can_user_like?(current_user) 
+    like_class = ""  
+    unlike_class = "hide"
+  else 
+    like_class = "hide"  
+    unlike_class = ""
+  end 
+%>
+
+
+  <%= link_to "Like", like_photo_path(photo), :method => :post, :remote => true, :id => "like-#{photo.id}", :class => like_class %>
+  <%= link_to "Unlike", unlike_photo_path(photo), :method => :post, :remote => true, :id => "unlike-#{photo.id}", :class => unlike_class %>
+
 
  <% photo.likes.each do |a| %>
     <%= link_to a.user.try(:name), user_path(a.user) if a.user %>           <!-- 顯示like的人 -->
@@ -44,10 +55,8 @@
  <% end %> 
  <br>
 
-  <%#= link_to photo.user.likes.count, photo_path(photo) %>                    <!-- 自己曾經按like的照片 -->
- <% @photos.each do |p| %>
-   發文者:<%= link_to p.user.try(:name), user_path(p.user) %>                      <!-- 自己 -->
- <% end %>
+  <%#= link_to photo.user.likes.count, photo_path(photo) %>                            <!-- 自己曾經按like的照片 -->
+  發文者:<%= link_to photo.user.try(:name), user_path(photo.user) %>                      <!-- 自己 -->
  <br>
 
  訂閱:<%= link_to "subscription", subscription_photo_path(photo), :method => :post %>    <!-- 訂閱 -->
@@ -72,7 +81,7 @@
 
  <%= form_for photo.comments.build do |f| %>
     <%#= f.label :content,'content' %>
-    <%= f.text_area :content %>                                                 <!-- 要留言的表單 -->
+    <%= f.text_area :content %>                                                <!-- 要留言的表單 -->
     <%= f.hidden_field :photo_id %>
     <%= f.submit 'comment' %>
  <% end %>

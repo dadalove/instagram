@@ -1,92 +1,60 @@
-<h1>Instagram</h1>
+<div class='home_content'>
+  <div class='wrapper'>
+    <% @photos.each do |photo| %>
+      <%= link_to photo.user.try(:name), user_path(photo.user), :class => 'author' %><!-- 自己 -->
+      <div class='time'><%= photo.created_at.to_formatted_s(:short) %></div>  <!-- po照片的時間 -->
 
-<% if current_user %>
-  Hi, <%= current_user.name %> <br>
-  <%= link_to "Add Photo", new_photo_path %>
-  <%= link_to "登出", auth_signout_path, :method => :delete %></a>
-<% else %>
-  <%= link_to "Facebook 登入", "/auth/facebook" %></a>
-<% end %>
+      <div class='content_wrapper'>
+        <div class='content'>
+          <%= link_to image_tag(photo.avatar(:medium)), photo_path(photo), :class => 'photo' %>
+          <% if current_user == photo.user %>
+            <%= link_to "x", photo_path(photo), :method => :delete, :class => 'photo_delete' %>
+          <% end %>
 
+            <div class='like_wrapper'>
+              <% if photo.can_user_like?(current_user) %>
+                <%= link_to image_tag("unlike.png"), like_photo_path(photo), :method => :post %>
+              <% else %>
+                <%= link_to image_tag("like.png"), unlike_photo_path(photo), :method => :post %>
+              <% end %>
+            
+              <%= photo.likes.count %>
+            
+              <% photo.likes.each do |a| %>
+                <%= link_to a.user.try(:name), user_path(a.user) if a.user %>       <!-- 顯示like的人 -->
+              <% end %> 
+            </div>
 
-<br>
+            <div class='description'>  
+              <%= photo.content %>                                                  <!-- photo描述 -->
+            </div>
 
-<% @photos.each do |photo| %>
+            <div class='tag'>
+              Tag:<%= tag_links(photo.all_tags) %>                                      <!-- tags -->
+            </div>
+                        
+            <%#= link_to photo.user.likes.count, photo_path(photo) %>         <!-- 自己曾經按like的照片 -->
+                     
+            <div class='reply_wrapper'>                      
+              <% photo.comments.each do |comment| %>
+                <%= link_to comment.user.try(:name), user_path(comment.user), :class => 'reply_user' %>
+                <div class='reply_content'>
+                  <%= comment.content %>                        <!-- 留言的內容 -->
+                  <% if current_user == comment.user %>
+                    <%= link_to "x", comment_path(comment), :method => :delete, :class => 'reply_del' %>
+                  <% end %>
+                </div> 
+            <br>
+              <% end %>
+            </div>
 
- <%= link_to image_tag(photo.avatar(:medium)), photo_path(photo) %>  <br>       <!-- 照片 -->
- 
- content:<%= photo.content %> <br>                                              <!-- photo描述 -->
-  
- tags:<%= tag_links(photo.all_tags) %>                                          <!-- tags -->
- 
- <% if current_user == photo.user %>
-    <%= link_to "delete", photo_path(photo), :method => :delete %>              <!-- 刪除自己的po -->
- <% end %>
- <br>
-
- <%= photo.likes.count %>
-
-<% 
-  if photo.can_user_like?(current_user) 
-    like_class = ""  
-    unlike_class = "hide"
-  else 
-    like_class = "hide"  
-    unlike_class = ""
-  end 
-%>
-
-
-  <%= link_to "Like", like_photo_path(photo), :method => :post, :remote => true, :id => "like-#{photo.id}", :class => like_class %>
-  <%= link_to "Unlike", unlike_photo_path(photo), :method => :post, :remote => true, :id => "unlike-#{photo.id}", :class => unlike_class %>
-
-
- <% photo.likes.each do |a| %>
-    <%= link_to a.user.try(:name), user_path(a.user) if a.user %>           <!-- 顯示like的人 -->
- <% end %>  
- <br>    
-
- <%= photo.subscriptions.count %>
-
- <% if photo.can_user_subscription?(current_user) %>
-  <%= link_to "subscription", subscription_photo_path(photo), :method => :post %>
- <% else %>
-  <%= link_to "unsubscription", unsubscription_photo_path(photo), :method => :post %>
- <% end %> 
- <br>
-
-  <%#= link_to photo.user.likes.count, photo_path(photo) %>                            <!-- 自己曾經按like的照片 -->
-  發文者:<%= link_to photo.user.try(:name), user_path(photo.user) %>                      <!-- 自己 -->
- <br>
-
- 訂閱:<%= link_to "subscription", subscription_photo_path(photo), :method => :post %>    <!-- 訂閱 -->
- <%= photo.subscriptions.count %>
-
- <br>
-
- 時間:<%= photo.created_at.to_formatted_s(:short) %>                               <!-- po照片的時間 -->
-  
- <br>
-
- <% photo.comments.each do |comment| %>
-   <%= link_to comment.user.try(:name), user_path(comment.user) %>            <!-- 留言的人 -->
-   <%= comment.content %>                                                     <!-- 留言的內容 -->
-
-   <% if current_user == comment.user %>
-     <%= link_to "delete", comment_path(comment), :method => :delete %>       <!-- 留言者的delete -->
-   <% end %>
-
-    <br>
- <% end %>
-
- <%= form_for photo.comments.build do |f| %>
-    <%#= f.label :content,'content' %>
-    <%= f.text_area :content %>                                                <!-- 要留言的表單 -->
-    <%= f.hidden_field :photo_id %>
-    <%= f.submit 'comment' %>
- <% end %>
- 
-<% end %>
-
-<%= paginate @photos %>
-
+              <%= form_for photo.comments.build do |f| %>
+                <%= f.text_field :content, placeholder: "Write a comment", :class => 'content_textarea' %> <!-- 要留言的表單 -->
+                <%= f.hidden_field :photo_id %>
+              <% end %>
+          </div>
+    <% end %>
+      <div class='paginate'><%= paginate @photos %></div> 
+      </div>
+  </div>
+</div>

@@ -1,13 +1,22 @@
-<%= form_for @photo do |f| %>
+<%= image_tag('bg.jpeg', :class => 'bg') %>
+  <%= form_for @photo do |f| %>
+    
+      <div class='wrapper'>
+        <%= f.label :content,'content', :class => 'form_label_content' %> <br>
+        <%= f.text_area :content, :class => 'form_textarea_content'%>
+      </div>
 
-  <%= f.label :content,'content' %>
-  <%= f.text_area :content %>
+      <div class='wrapper'>
+        <%= f.file_field :avatar, :class => 'avatar'%>
+      </div>
 
-  <%= f.file_field :avatar%>
+      <div class='wrapper'>
+        <%= f.label :all_tags,'Tags', :class => 'label_tags' %> <br>
+        <%= f.text_field :all_tags, placeholder: "Tags separated with comma", :class => 'tags_input' %>
+      </div>
 
-  <%= f.label :all_tags,'Tags' %>
-  <%= f.text_field :all_tags, placeholder: "Tags separated with comma" %>
-
-  <%= f.submit %>
-
-<% end %>
+      <div class='wrapper'>
+        <%= f.submit 'submit', :class => 'submit' %>
+      </div>
+    
+  <% end %>

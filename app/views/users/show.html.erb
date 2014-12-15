@@ -1,11 +1,11 @@
-<%= link_to "Home", root_path %>
-<%= link_to "facebook登出", auth_signout_path, :method => :delete %> <br>  
-<%= @user.try(:name) %> <br>
-
-<h2>Friend List</h2>
-
-<h2>Request list</h2>
-
-<h2>Pending list</h2>
-
-  
+<div class='userpage_name'>
+  <%= image_tag('usercover.jpg', :class => 'usercover') %>
+  <span><%= @user.name %></span>
+</div> 
+  <div class='wrapper'>
+    <div class="userpage_photo_wrapper">
+      <% @user.photos.each do |photo| %>
+        <%= image_tag(photo.avatar(:thumb), :class => 'userpage_photo') %>
+      <% end %>
+    </div>
+  </div>

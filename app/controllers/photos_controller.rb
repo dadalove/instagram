@@ -3,7 +3,7 @@ class PhotosController < ApplicationController
   before_filter :authenticate_user!
 
   def index
-      @photos = Photo.all
+    @photos = Photo.all
   end
 
   def new
@@ -66,27 +66,27 @@ class PhotosController < ApplicationController
     end
   end
   
-  def subscription
-    @photo = Photo.find(params[:id])
+  # def subscription
+  #   @photo = Photo.find(params[:id])
 
-    if @photo.can_user_subscription?(current_user)
-      @subscription = @photo.subscriptions.build
-      @subscription.user = current_user
-      @subscription.save!
-    end
+  #   if @photo.can_user_subscription?(current_user)
+  #     @subscription = @photo.subscriptions.build
+  #     @subscription.user = current_user
+  #     @subscription.save!
+  #   end
 
-    redirect_to :back
-  end
+  #   redirect_to :back
+  # end
 
-  def unsubscription
-    @photo = Photo.find(params[:id])
+  # def unsubscription
+  #   @photo = Photo.find(params[:id])
 
-    @subscription = @photo.find_subscription_by_user(current_user)
+  #   @subscription = @photo.find_subscription_by_user(current_user)
 
-    @subscription.destroy if @subscription
+  #   @subscription.destroy if @subscription
 
-    redirect_to root_path
-  end
+  #   redirect_to root_path
+  # end
 
   private
 

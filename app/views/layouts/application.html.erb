@@ -8,6 +8,21 @@
 </head>
 <body>
 <%= flash[:alert] %>
+
+<div class='header'>
+  <div class='wrapper'>
+    <%= link_to image_tag("logo.png", :class => "logo"), root_path %>
+
+    <% if current_user %>
+      <%= link_to "Sign out", auth_signout_path, :method => :delete, :class => 'fb_signout' %></a>
+      <span class='current_user'>Hi, <%= current_user.name %></span>
+      <%= link_to "+", new_photo_path, :class => 'add_photo' %>
+    <% else %>
+      <%= link_to "Sign in", "/auth/facebook", :class => 'fb_sign' %></a>
+    <% end %>
+  </div>
+</div>
+
 <%= yield %>
 
 </body>

@@ -14,3 +14,23 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+
+var ready = function(){
+  $('.reply_content').hover(function(){
+    // console.log(this);
+    $(this.children).css({opacity: '1'});
+    //$(this).find('a').css({opacity: '1'});
+  },function(){
+    // console.log(this);
+    $(this.children).css({opacity: '0'});
+    //$(this).find('a').css({opacity: '0'});
+  });
+};
+
+
+
+
+
+
+$(document).ready(ready);
+$(document).on('page:load', ready);
